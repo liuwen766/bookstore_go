@@ -70,13 +70,13 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	row, errFind := dao.FindUserByName(username)
 
 	//验证用户名是否已经存在  (后期改用 AJAX 处理)
-	//if row != nil && errFind == nil {
-	//	t := template.Must(template.ParseFiles("views/pages/user/regist.html"))
-	//	errExe := t.Execute(w, "用户名已存在！请重新输入。")
-	//	if errExe != nil {
-	//		fmt.Fprintln(w, "解析模板出现异常 ，err:", errExe)
-	//	}
-	//}
+	if row != nil && errFind == nil {
+		t := template.Must(template.ParseFiles("views/pages/user/regist.html"))
+		errExe := t.Execute(w, "用户名已存在！请重新输入。")
+		if errExe != nil {
+			fmt.Fprintln(w, "解析模板出现异常 ，err:", errExe)
+		}
+	}
 
 	if row == nil && errFind != nil {
 		//进行添加用户操作
@@ -157,6 +157,10 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if !isLogin || session == nil {
 		fmt.Println("数据库中没查找到该session相关记录，err", errFindSession)
 		pages.IsLogin = false
+		//这里应该直接返回到登录页面
+		t := template.Must(template.ParseFiles("views/pages/user/logining.html"))
+		t.Execute(w, "")
+		return
 	} else {
 		pages.IsLogin = true
 		pages.Username = session.Username

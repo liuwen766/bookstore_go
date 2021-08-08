@@ -88,11 +88,12 @@ func GetCartInfo(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//清空购物车
+//清空  购物车:carts          购物项:cart_itmes
 func DeleteCart(w http.ResponseWriter, r *http.Request) {
 	cartId := r.FormValue("cartId")
 	//删除购物车之前，删除所有cartId下的购物项
 	dao.DeleteCartItemByCartId(cartId)
+	//再去删除购物车
 	dao.DeleteCartById(cartId)
 
 	http.Redirect(w, r, "/getCartInfo", 302)

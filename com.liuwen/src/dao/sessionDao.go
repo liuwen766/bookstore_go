@@ -65,10 +65,8 @@ func IsLogin(r *http.Request) (bool, *model.Session, error) {
 		return false, nil, nil
 	} else {
 		sqlStr := "select session_id,user_id,username from sessions where session_id =?"
-
 		//MD5 加密密码
 		session_id := utils.Md5(cookie.Value)
-
 		res := &model.Session{}
 		err := utils.Db.QueryRow(sqlStr, session_id).Scan(&res.Session_id, &res.User_id, &res.Username)
 		if err != nil {
