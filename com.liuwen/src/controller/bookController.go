@@ -3,8 +3,10 @@ package controller
 import (
 	"bookstores2/src/dao"
 	"bookstores2/src/model"
+	"encoding/json"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -17,6 +19,19 @@ func FindAllBooks(w http.ResponseWriter, r *http.Request) {
 	}
 	t := template.Must(template.ParseFiles("views/pages/manager/book_manager.html"))
 	t.Execute(w, books)
+}
+
+func GetBooks(w http.ResponseWriter, r *http.Request) {
+	books, err := dao.GetBooks()
+	if err != nil {
+		fmt.Println("分页查询全部图书出现异常,err：", err)
+	}
+	marshal, err := json.Marshal(books)
+	if err != nil {
+		fmt.Println("分页查询全部图书出现异常,err：", err)
+	}
+	log.Println("查询返回所有书籍成功!(前后端分离)")
+	w.Write(marshal)
 }
 
 //分页查找 所有图书

@@ -23,6 +23,8 @@ func main() {
 	http.HandleFunc("/FindUserByName", controller.FindUserByName)
 
 	//图书相关
+	//测试，获取所有书籍（前后端分离）  http://localhost:8080/getBooks
+	http.HandleFunc("/getBooks", controller.GetBooks)
 	http.HandleFunc("/getPageBooks", controller.GetPageBooks)
 	http.HandleFunc("/toUpdateBookPage", controller.ToUpdateBookPage)
 	http.HandleFunc("/deleteBook", controller.DeleteBookById)

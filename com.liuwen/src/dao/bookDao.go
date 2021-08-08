@@ -155,6 +155,26 @@ func getBooksForPage(sqlStr string, args ...interface{}) ([]*model.Book, error) 
 	return books, nil
 }
 
+func GetBooks() ([]*model.Book, error) {
+	sqlStr := "select * from books"
+	rows, errQuery := utils.Db.Query(sqlStr)
+	if errQuery != nil {
+		fmt.Println("分页获取部分记录出现异常，err:", errQuery)
+		return nil, errQuery
+	}
+	var books []*model.Book
+	for rows.Next() {
+		book := &model.Book{}
+		errNotFound := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Price, &book.Sales, &book.Stock, &book.ImagePath)
+		if errNotFound != nil {
+			fmt.Println("赋值结果时出现异常，err :", errNotFound)
+			return nil, errNotFound
+		}
+		books = append(books, book)
+	}
+	return books, nil
+}
+
 //分页查询图书，
 //返回的 Page 包含页码，该页包含的图书等信息
 func GetPageBooks(IndexPage int64) (*model.Page, error) {
